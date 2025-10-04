@@ -34,7 +34,7 @@ const seedAdmin = () => __awaiter(void 0, void 0, void 0, function* () {
             password: hashedPassword,
         };
         const superUser = yield db_1.prisma.user.create({ data: payload });
-        console.log("Super User Created.... \n ");
+        console.log("Super User Created.. \n ");
         console.log(superUser);
     }
     catch (err) {

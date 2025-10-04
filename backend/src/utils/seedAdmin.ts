@@ -30,7 +30,7 @@ export const seedAdmin = async () => {
 
     const superUser = await prisma.user.create({ data: payload });
 
-    console.log("Super User Created.... \n ");
+    console.log("Super User Created.. \n ");
     console.log(superUser);
   } catch (err) {
     console.log(err);

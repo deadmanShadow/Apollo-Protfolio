@@ -19,7 +19,7 @@ app.use(express_1.default.urlencoded({ extended: true }));
 app.use((0, cookie_parser_1.default)());
 app.use("/api/v1", routes_1.router);
 app.get("/", (req, res) => {
-    res.status(200).json({ message: "Welcome to my backend API" });
+    res.status(200).json({ message: "Welcome Protfolio!!!" });
 });
 //global error handle
 app.use(globalErrorHandler_1.globalErrorHandler);
