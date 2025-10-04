@@ -1,0 +1,14 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.userRoutes = void 0;
+const express_1 = require("express");
+const multer_config_1 = require("../../config/multer.config");
+const checkAuth_1 = require("../../middlewares/checkAuth");
+const validateRequest_1 = require("../../middlewares/validateRequest");
+const user_controller_1 = require("./user.controller");
+const user_validation_1 = require("./user.validation");
+const router = (0, express_1.Router)();
+const userController = new user_controller_1.UserController();
+router.get("/about-me", userController.aboutMe);
+router.patch("/update", checkAuth_1.checkAuth, multer_config_1.multerUpload.single("picture"), (0, validateRequest_1.validateRequest)(user_validation_1.UserUpdateAPISchema), userController.updateUser);
+exports.userRoutes = router;

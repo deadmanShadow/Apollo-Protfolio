@@ -3,71 +3,74 @@
 
 // Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
-}
 
 generator client {
   provider = "prisma-client-js"
 }
 
-generator zod {
-  provider      = "prisma-zod-generator"
-  output        = "prisma/zod"
-  emitManifest  = true
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
-model User {
-  id        Int              @id @default(autoincrement())
-  name      String
-  email     String           @unique
-  picture   String?
-  password  String
-  phone     String?
-  bio       String?
-  skills    String[]
-  createdAt DateTime         @default(now())
-  updatedAt DateTime
+ 
 
-  blogs           Blog[]
-  projects        Project[]
-  workExperiences WorkExperience[]
+
+model User{
+    id Int @id @default(autoincrement())
+
+    name String
+    email String @unique
+    picture String?
+    password String 
+
+    phone String?
+    bio String?
+
+    skills String[]
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt()
+
+    blogs Blog[]
+    projects Project[]
+    experiences WorkExperience[]
 }
 
-model Blog {
-  id        Int      @id @default(autoincrement())
-  title     String
-  content   String
-  view      Int      @default(0)
-  published Boolean  @default(true)
+model Blog{
+  id Int @id @default(autoincrement())
+  title String 
+  content String 
+  view Int @default(0)
+  published Boolean @default(true)
   createdAt DateTime @default(now())
-  updatedAt DateTime
-  userId    Int
+  updatedAt DateTime @updatedAt
 
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  
+  user User @relation(fields: [userId],references: [id],onDelete: Cascade)
+  userId Int
 }
 
-model Project {
-  id          Int      @id @default(autoincrement())
-  title       String
-  thumbnail   String?
-  projectLink String
-  liveSite    String?
-  description String
-  features    String
-  userId      Int
 
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+model Project{
+  id Int @id @default(autoincrement())
+  title String
+  thumbnail String?
+  projectLink String 
+  liveSite String?
+  description String 
+  features String
+
+  user User @relation(fields: [userId],references: [id],onDelete: Cascade)
+  userId Int 
 }
 
-model WorkExperience {
-  id        Int      @id @default(autoincrement())
-  company   String
-  position  String
+model WorkExperience{
+  id Int @id @default(autoincrement())
+  company String 
+  position String 
   startDate DateTime
-  endDate   DateTime?
-  userId    Int
+  endDate DateTime?
 
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  user User @relation(fields: [userId],references: [id],onDelete: Cascade)
+  userId Int 
 }
