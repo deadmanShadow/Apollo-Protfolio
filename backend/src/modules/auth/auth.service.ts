@@ -29,13 +29,6 @@ export class AuthService {
       name: user.name,
       email: user.email,
     };
-
-    // const accessToken = generateToken(
-    //   jwtPayload,
-    //   env.JWT_SECRET,
-    //   env.JWT_ACCESS_TOKEN_EXPIRES
-    // );
-
     const accessToken = jwt.sign(jwtPayload, env.JWT_SECRET, {
       expiresIn: env.JWT_ACCESS_TOKEN_EXPIRES,
     });

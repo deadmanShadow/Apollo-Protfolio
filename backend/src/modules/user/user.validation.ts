@@ -6,4 +6,5 @@ export const UserUpdateAPISchema = z.object({
   phone: z.string().optional(),
   bio: z.string().optional(),
   skills: z.array(z.string()).optional(),
+  expreriences: z.array(z.boolean()).optional(),
 });

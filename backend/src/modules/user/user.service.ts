@@ -12,7 +12,6 @@ export class UserService {
         phone: true,
         bio: true,
         skills: true,
-        experiences: true,
       },
     });
 
