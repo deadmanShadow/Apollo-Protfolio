@@ -1,12 +1,11 @@
+import dotenv from "dotenv";
 import http, { Server } from "http";
 import app from "./app";
-import dotenv from "dotenv";
 import { prisma } from "./config/db";
 
 dotenv.config();
 
 let server: Server | null = null;
-
 
 async function connectToDB() {
   try {
@@ -20,15 +19,17 @@ async function connectToDB() {
 
 async function startServer() {
   try {
-     await connectToDB();
+    await connectToDB();
     server = http.createServer(app);
     server.listen(process.env.PORT, () => {
-      console.log(`🚀 Portfolio Server is running on port ${process.env.PORT}`);
+      console.log(
+        `Personal Protfolio Server is running on port ${process.env.PORT}`
+      );
     });
 
     handleProcessEvents();
   } catch (error) {
-    console.error("❌ Error during server startup:", error);
+    console.error("Error during server startup:", error);
     process.exit(1);
   }
 }

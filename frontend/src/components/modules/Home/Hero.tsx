@@ -22,7 +22,7 @@ const Banners = () => {
       {/* Main Content */}
       <div className="relative z-10 text-center lg:text-left">
         <p className="text-gray-300 md:text-xl text-lg font-light">
-          Hello there! I&apos;m
+          Hey! I&apos;m
         </p>
         <h1 className="text-white text-4xl sm:text-5xl md:text-6xl font-primary font-extrabold mt-2 leading-tight">
           Abdullah Raihan Shamil
@@ -35,25 +35,15 @@ const Banners = () => {
             deleteSpeed={25}
             loop={0}
             typeSpeed={100}
-            words={[
-              "A Full Stack Developer",
-              "A MERN Stack Developer",
-              "A React Developer",
-              "A Frontend Developer",
-              "A Backend Developer",
-            ]}
+            words={["Software Developer"]}
           />
-        </p>
-        <p className="max-w-md mx-auto lg:mx-0 text-gray-400 mt-6 text-sm md:text-base">
-          Driven by a passion for continuous learning, I’m a developer on a
-          mission to master both front-end and back-end technologies.
         </p>
 
         <a
-          href="https://drive.google.com/file/d/1LAiCkVdFkVi4WJy7AaOvZ37ONKcbnOwP/view"
+          href="https://drive.google.com/file/d/1MR2iNCVGkz__NNTKJCSUwRMpVgzsHih8/view?usp=drive_link"
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center gap-2 px-6 py-3 mt-8 text-white font-semibold rounded-full shadow-lg bg-[#0482b4] transition-transform transform hover:scale-105 hover:shadow-xl"
+          className="inline-flex items-center gap-2 px-6 py-3 mt-8 text-white font-semibold rounded-full shadow-lg bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-500 bg-[length:200%_200%] animate-gradient-x transition-transform transform hover:scale-105 hover:shadow-xl"
         >
           Download Resume <MdOutlineFileDownload className="h-5 w-5" />
         </a>

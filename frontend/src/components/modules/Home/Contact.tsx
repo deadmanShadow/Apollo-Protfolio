@@ -74,7 +74,7 @@ const Contact = () => {
           </div>
           <div className="flex items-center mb-1 font-medium">
             <MdLocationOn className="text-[#007BFF] text-xl mr-4" />
-            <p className="">Bogura, Bangladesh</p>
+            <p className="">Cumilla, Bangladesh</p>
           </div>
           <div className="flex items-center mt-1 md:space-x-4 space-x-1 font-medium">
             <MdShare className="text-[#007BFF] text-xl mr-3 md:mr-0" />
@@ -91,7 +91,7 @@ const Contact = () => {
               GitHub
             </a>
             <a
-              href="https://www.facebook.com/profile.php?id=61551521424123"
+              href="https://www.facebook.com/deadmanShadow1"
               className=" hover:text-blue-500"
             >
               Facebook

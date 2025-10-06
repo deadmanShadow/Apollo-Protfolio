@@ -1,62 +1,80 @@
-import html from "../../../assets/html.png";
-import tailwindIcon from "../../../assets/tailwind-css.svg";
-import jsIcon from "../../../assets/js.png";
-import reactIcon from "../../../assets/react.png";
-import reduxIcon from "../../../assets/redux.svg";
-import firebaseIcon from "../../../assets/firebase.png";
-import nodejsIcon from "../../../assets/nodejs.png";
-import expressJsIcon from "../../../assets/express.png";
-import mongodbIcon from "../../../assets/mongodb-original-wordmark.svg";
-import gitIcon from "../../../assets/git.png";
-import typescript from "../../../assets/typescript.png";
-import postgresqlIcon from "../../../assets/postgresql.png";
 import {
-  Briefcase,
   Clock,
-  Feather,
+  Lightbulb,
   MessageCircle,
+  ShieldCheck,
   Sparkles,
-  Users,
+  Zap,
 } from "lucide-react";
 import Image from "next/image";
-
+import cppIcon from "../../../assets/cppIcon.png";
+import dotnetCore from "../../../assets/dotnetCore.png";
+import expressJsIcon from "../../../assets/express.png";
+import firebaseIcon from "../../../assets/firebase.png";
+import gitIcon from "../../../assets/git.png";
+import goLangIcon from "../../../assets/goLangIcon.png";
+import jsIcon from "../../../assets/js.png";
+import mongodbIcon from "../../../assets/mongodb-original-wordmark.svg";
+import mongoose from "../../../assets/mongoose.png";
+import nextjsIcon from "../../../assets/nextjsIcon.jpeg";
+import nodejsIcon from "../../../assets/nodejs.png";
+import postgresqlIcon from "../../../assets/postgresql.png";
+import prismaIcon from "../../../assets/prisma.svg";
+import reactIcon from "../../../assets/react.png";
+import reduxIcon from "../../../assets/redux.svg";
+import typescript from "../../../assets/typescript.png";
 const Experience = () => {
   const technologies = [
-    { name: "HTML", description: "Markup Language", icon: html },
-    { name: "Tailwind CSS", description: "CSS Framework", icon: tailwindIcon },
+    // Programming Languages
     { name: "JavaScript", description: "Programming Language", icon: jsIcon },
+    { name: "TypeScript", description: "Typed JavaScript", icon: typescript },
+    { name: "C++", description: "Programming Language", icon: cppIcon },
     {
-      name: "TypeScript",
-      description: "Typed JavaScript",
-      icon: typescript,
+      name: "Golang",
+      description: "Backend Programming Language",
+      icon: goLangIcon,
     },
+
+    // Frontend
     { name: "React", description: "Frontend Library", icon: reactIcon },
     { name: "Redux", description: "State Management", icon: reduxIcon },
+    {
+      name: "Next.js",
+      description: "React Framework for SSR & SSG",
+      icon: nextjsIcon,
+    },
 
+    // Backend
+    { name: "Node.js", description: "JavaScript Runtime", icon: nodejsIcon },
+    { name: "Express.js", description: "Web Framework", icon: expressJsIcon },
+    { name: "ASP.NET Core", description: "Web Framework", icon: dotnetCore },
+    { name: "Prisma", description: "ORM for Databases", icon: prismaIcon },
     {
       name: "Firebase",
       description: "Backend as a Service",
       icon: firebaseIcon,
     },
-    { name: "Node.js", description: "JavaScript Runtime", icon: nodejsIcon },
-    { name: "Express.js", description: "Web Framework", icon: expressJsIcon },
+
+    // Databases
     { name: "MongoDB", description: "NoSQL Database", icon: mongodbIcon },
+    { name: "Mongoose", description: "MongoDB ODM", icon: mongoose },
     { name: "PostgreSQL", description: "SQL Database", icon: postgresqlIcon },
+
+    // Tools
     { name: "Git", description: "Version Control", icon: gitIcon },
   ];
 
   const softSkills = [
-    
-    { name: "Communication", icon: MessageCircle },
-    { name: "Team Collaboration", icon: Users },
-    { name: "Adaptability", icon: Feather },
-    { name: "Time Management", icon: Clock },
+    { name: "Quick Learning & Adaptability", icon: Zap },
+    { name: "Analytical Thinking", icon: Lightbulb },
     { name: "Problem Solving", icon: Sparkles },
-    { name: "Attention to Detail", icon: Briefcase },
+    { name: "Teaching & Communication Skills", icon: MessageCircle },
+    { name: "Discipline & Consistency", icon: Clock },
+    { name: "Ethical & Integrity-driven", icon: ShieldCheck },
   ];
 
   return (
-    <div id="experience" className="py-8 lg:py-20">
+    <div id="experience" className="py-2 lg:py-20">
       <div className="max-w-6xl mx-auto px-4">
         <h1 className="text-center text-3xl md:text-4xl lg:text-5xl mb-2 font-bold bg-gradient-to-r from-[#00CED1] via-blue-500 to-purple-500 bg-clip-text text-transparent animate-gradient">
           Skills & Expertise
