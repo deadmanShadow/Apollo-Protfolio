@@ -1,11 +1,17 @@
-import cookieParser from "cookie-parser";
+import compression from "compression";
 import cors from "cors";
-import express, { Request, Response } from "express";
-import { StatusCodes } from "http-status-codes";
-import { globalErrorHandler } from "./middlewares/globalErrorHandler";
-import { router } from "./routes";
+import express from "express";
+import globalErrorHandler from "./app/middleware/globalErrorHandler";
+import { router } from "./app/routes";
+import notFound from "./utils/notFound";
 
 const app = express();
+
+// Middleware
+app.use(cors());
+app.use(compression());
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 app.use(
   cors({
@@ -13,23 +19,17 @@ app.use(
     credentials: true,
   })
 );
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-app.use(cookieParser());
+
+// Default route for testing
+app.get("/", (_req, res) => {
+  res.send("API is running");
+});
 
 app.use("/api/v1", router);
 
-app.get("/", (req: Request, res: Response) => {
-  res.status(200).json({ message: "Welcome Protfolio!!!" });
-});
+app.use(notFound);
 
-//global error handle
+// Global Error Handler
 app.use(globalErrorHandler);
-//404 not found
-app.use((req: Request, res: Response) => {
-  res.status(StatusCodes.NOT_FOUND).json({
-    success: false,
-    message: "API route not found",
-  });
-});
+
 export default app;

@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
+import React, { useState } from "react";
 import toast from "react-hot-toast";
 
 export default function LoginForm() {
@@ -12,34 +12,39 @@ export default function LoginForm() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     console.log("Form submitted with:", { email, password });
-    
+
     if (!email || !password) {
       toast.error("Please fill in all fields");
       return;
     }
 
     setLoading(true);
-    
+
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/login`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, password }),
-      });
-      
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/auth/login`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ email, password }),
+        }
+      );
+
       const result = await response.json();
       console.log("Login result:", result);
-      
+
       if (result?.success) {
         console.log("Login successful, redirecting...");
         toast.success("Login successful!");
-        sessionStorage.setItem("authToken", result.data.accessToken || "authenticated");
+        sessionStorage.setItem(
+          "authToken",
+          result.data.accessToken || "authenticated"
+        );
         sessionStorage.setItem("user", JSON.stringify(result.data.user));
-        
+
         window.location.replace("/dashboard");
-        
       } else {
         console.log("Login failed:", result);
         toast.error(result?.message || "Invalid credentials");
@@ -74,7 +79,10 @@ export default function LoginForm() {
           </div>
 
           <div>
-            <label htmlFor="password" className="block text-sm font-medium mb-2">
+            <label
+              htmlFor="password"
+              className="block text-sm font-medium mb-2"
+            >
               Password
             </label>
             <input
@@ -88,7 +96,11 @@ export default function LoginForm() {
             />
           </div>
 
-          <Button type="submit" disabled={loading} className="w-full mt-2 bg-blue-700 hover:bg-blue-500">
+          <Button
+            type="submit"
+            disabled={loading}
+            className="w-full mt-2 bg-blue-700 hover:bg-blue-500"
+          >
             {loading ? "Logging in..." : "Login"}
           </Button>
         </form>

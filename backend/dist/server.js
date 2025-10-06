@@ -14,18 +14,18 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const http_1 = __importDefault(require("http"));
 const app_1 = __importDefault(require("./app"));
+const dotenv_1 = __importDefault(require("dotenv"));
 const db_1 = require("./config/db");
-const env_1 = require("./config/env");
-const seedAdmin_1 = require("./utils/seedAdmin");
+dotenv_1.default.config();
 let server = null;
 function connectToDB() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             yield db_1.prisma.$connect();
-            console.log("***Database Connected!");
+            console.log("✅ Database connected.");
         }
-        catch (err) {
-            console.log("*** DB connection failed!");
+        catch (error) {
+            console.error("❌ Error connecting to database:", error);
             process.exit(1);
         }
     });
@@ -35,28 +35,32 @@ function startServer() {
         try {
             yield connectToDB();
             server = http_1.default.createServer(app_1.default);
-            server.listen(env_1.env.PORT, () => {
-                console.log("Server is Running on port:", env_1.env.PORT);
+            server.listen(process.env.PORT, () => {
+                console.log(`🚀 Portfolio Server is running on port ${process.env.PORT}`);
             });
             handleProcessEvents();
         }
-        catch (err) {
-            console.log("Error during server setup:", err);
+        catch (error) {
+            console.error("❌ Error during server startup:", error);
             process.exit(1);
         }
     });
 }
+/**
+ * Gracefully shutdown the server and close database connections.
+ * @param {string} signal - The termination signal received.
+ */
 function gracefulShutdown(signal) {
     return __awaiter(this, void 0, void 0, function* () {
         console.warn(`🔄 Received ${signal}, shutting down gracefully...`);
         if (server) {
             server.close(() => __awaiter(this, void 0, void 0, function* () {
-                console.log("HTTP server closed.");
+                console.log("✅ HTTP server closed.");
                 try {
                     console.log("Server shutdown complete.");
                 }
                 catch (error) {
-                    console.error("Error during shutdown:", error);
+                    console.error("❌ Error during shutdown:", error);
                 }
                 process.exit(0);
             }));
@@ -66,7 +70,9 @@ function gracefulShutdown(signal) {
         }
     });
 }
-//handle system signals and unepected errors.
+/**
+ * Handle system signals and unexpected errors.
+ */
 function handleProcessEvents() {
     process.on("SIGTERM", () => gracefulShutdown("SIGTERM"));
     process.on("SIGINT", () => gracefulShutdown("SIGINT"));
@@ -79,7 +85,5 @@ function handleProcessEvents() {
         gracefulShutdown("unhandledRejection");
     });
 }
-(() => __awaiter(void 0, void 0, void 0, function* () {
-    yield startServer();
-    yield (0, seedAdmin_1.seedAdmin)();
-}))();
+// Start the application
+startServer();

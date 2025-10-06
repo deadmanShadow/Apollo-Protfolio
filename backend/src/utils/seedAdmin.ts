@@ -1,38 +1,52 @@
-import { Prisma } from "@prisma/client";
+import { UserRole } from "@prisma/client";
 import bcrypt from "bcryptjs";
 import { prisma } from "../config/db";
-import { env } from "../config/env";
+import { envVars } from "../config/env";
 
-export const seedAdmin = async () => {
+const seedAdmin = async () => {
   try {
-    const user = await prisma.user.findUnique({
-      where: { email: env.SUPER_USER_EMAIL },
+    console.log("Connecting to database...");
+    await prisma.$connect();
+    console.log("Database connected successfully");
+
+    const isExistAdmin = await prisma.admin.findFirst({
+      where: {
+        role: UserRole.ADMIN,
+      },
     });
 
-    if (user) {
-      console.log("Super User already exists!");
+    if (isExistAdmin) {
+      console.log("Admin already exists");
       return;
     }
 
-    console.log("Creating Admin.....");
-
-    console.log(env.SUPER_USER_PASSWORD, env.HASH_SALT_ROUND);
+    console.log("Creating admin user...");
     const hashedPassword = await bcrypt.hash(
-      env.SUPER_USER_PASSWORD as string,
-      Number(env.HASH_SALT_ROUND)
+      envVars.ADMIN_PASSWORD,
+      Number(envVars.BCRYPT_SALT_ROUND)
     );
 
-    const payload: Prisma.UserCreateInput = {
-      name: env.SUPER_USER_NAME as string,
-      email: env.SUPER_USER_EMAIL as string,
-      password: hashedPassword,
-    };
+    const admin = await prisma.admin.create({
+      data: {
+        name: "Abdullah Raihan Shamil",
+        email: envVars.ADMIN_EMAIL,
+        password: hashedPassword,
+        role: UserRole.ADMIN,
+      },
+    });
 
-    const superUser = await prisma.user.create({ data: payload });
-
-    console.log("Super User Created.. \n ");
-    console.log(superUser);
-  } catch (err) {
-    console.log(err);
+    console.log("Admin created successfully:", {
+      id: admin.id,
+      name: admin.name,
+      email: admin.email,
+      role: admin.role,
+    });
+  } catch (error) {
+    console.error("Error seeding admin:", error);
+    process.exit(1);
+  } finally {
+    await prisma.$disconnect();
   }
 };
+
+seedAdmin();
