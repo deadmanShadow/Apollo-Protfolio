@@ -83,10 +83,11 @@ model Project {
 
 model WorkExperience {
   id        Int       @id @default(autoincrement())
-  company   String
-  position  String
-  startDate DateTime
-  endDate   DateTime?
+  company   String?   
+  position  String?  
+  startDate DateTime? 
+  endDate   DateTime? 
+  isFresher Boolean   @default(false) 
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt()
 

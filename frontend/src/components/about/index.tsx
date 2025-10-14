@@ -8,7 +8,7 @@ export async function AboutMe({ user }: { user: any }) {
     <>
       <div className="flex flex-row">
         <Link
-          href="https://github.com/icerahi"
+          href="https://github.com/deadmanShadow"
           target="_blank"
           rel="noopener noreferrer"
           className="rounded-full"
@@ -38,7 +38,7 @@ export async function AboutMe({ user }: { user: any }) {
           asChild
         >
           <Link
-            href="https://linkedin.com/in/icerahi"
+            href="https://linkedin.com/in/deadmanshadow"
             target="_blank"
             rel="noopener noreferrer"
             className="hidden md:flex"
@@ -57,7 +57,7 @@ export async function AboutMe({ user }: { user: any }) {
         <div>
           <h2 className="text-2xl font-bold pb-2"> Skills:</h2>
           <h3>
-            {user.skills.map((skill: string, index: number) => {
+            {user.skills.map((skill: any, index: number) => {
               const colors = [
                 "bg-red-200",
                 "bg-blue-200",
@@ -69,8 +69,11 @@ export async function AboutMe({ user }: { user: any }) {
               ];
               const colorClass = colors[index % colors.length];
               return (
-                <span key={skill} className={`${colorClass} p-1 m-1 font-bold`}>
-                  {skill}
+                <span
+                  key={skill.id}
+                  className={`${colorClass} inline-block p-1 m-1 font-bold leading-snug`}
+                >
+                  {skill.name}
                 </span>
               );
             })}

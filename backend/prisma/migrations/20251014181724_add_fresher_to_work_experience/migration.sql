@@ -1,0 +1,5 @@
+-- AlterTable
+ALTER TABLE "WorkExperience" ADD COLUMN     "isFresher" BOOLEAN NOT NULL DEFAULT false,
+ALTER COLUMN "company" DROP NOT NULL,
+ALTER COLUMN "position" DROP NOT NULL,
+ALTER COLUMN "startDate" DROP NOT NULL;

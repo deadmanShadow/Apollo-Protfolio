@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, Merriweather } from "next/font/google";
 import { Toaster } from "react-hot-toast";
 import "./globals.css";
 
@@ -7,14 +7,18 @@ const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
 });
-
+const merriweather = Merriweather({
+  subsets: ["latin"],
+  weight: ["400", "700"], // 400 = normal, 700 = bold
+  variable: "--font-merriweather",
+});
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
 });
 
 export const metadata: Metadata = {
-  title: "MD IMRAN HASAN",
+  title: "Abdullah Raihan Shamil",
   description: "Portfolio",
 };
 
@@ -26,7 +30,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased w-full`}
+        className={`${merriweather.variable} ${merriweather.variable} antialiased w-full`}
       >
         {children}
         <Toaster />

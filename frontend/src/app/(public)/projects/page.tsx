@@ -16,7 +16,7 @@ const ProjectsPage = async () => {
   return (
     <div className="py-4">
       <div className="grid grid-cols-1 gap-4  mx-auto font-mono text-pretty  md:w-[60vw]">
-        <small className="font-bold">Total: {meta.total} </small>
+        <h3 className="font-bold">Total: {meta.total} </h3>
 
         {data?.map((item: any) => (
           <ProjectCard project={item} key={item.id} />
