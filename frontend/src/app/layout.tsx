@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Toaster } from "react-hot-toast";
 import "./globals.css";
-// import SessionProvider from "@/components/providers/SessionProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -15,11 +14,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Abdullah Raihan Shamil",
-  description: "Personal portfolio website with blog and projects.",
-  icons: {
-    icon: "/logo.png",
-  },
+  title: "MD IMRAN HASAN",
+  description: "Portfolio",
 };
 
 export default function RootLayout({
@@ -30,11 +26,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased w-full`}
       >
-        {" "}
-        <Toaster position="top-right" />
         {children}
+        <Toaster />
       </body>
     </html>
   );
