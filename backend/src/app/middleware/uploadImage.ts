@@ -1,6 +1,6 @@
-import multer from "multer";
 import { v2 as cloudinary } from "cloudinary";
 import { Request } from "express";
+import multer from "multer";
 import { envVars } from "../../config/env";
 
 cloudinary.config({
@@ -24,17 +24,19 @@ const upload = multer({
 
 const uploadToCloudinary = async (buffer: Buffer, fileName: string) => {
   return new Promise((resolve, reject) => {
-    cloudinary.uploader.upload_stream(
-      {
-        resource_type: "image",
-        public_id: `portfolio/${fileName}-${Date.now()}`,
-        folder: "portfolio",
-      },
-      (error, result) => {
-        if (error) reject(error);
-        else resolve(result?.secure_url);
-      }
-    ).end(buffer);
+    cloudinary.uploader
+      .upload_stream(
+        {
+          resource_type: "image",
+          public_id: `portfolio/${fileName}-${Date.now()}`,
+          folder: "portfolio",
+        },
+        (error, result) => {
+          if (error) reject(error);
+          else resolve(result?.secure_url);
+        }
+      )
+      .end(buffer);
   });
 };
 

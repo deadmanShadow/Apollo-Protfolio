@@ -1,35 +1,34 @@
-import compression from "compression";
+import cookieParser from "cookie-parser";
 import cors from "cors";
-import express from "express";
-import globalErrorHandler from "./app/middleware/globalErrorHandler";
-import { router } from "./app/routes";
-import notFound from "./utils/notFound";
+import express, { Request, Response } from "express";
+import { StatusCodes } from "http-status-codes";
+import { globalErrorHandler } from "./middlewares/globalErrorHandler";
+import { router } from "./routes";
 
 const app = express();
 
-// Middleware
-app.use(cors());
-app.use(compression());
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-
 app.use(
   cors({
-    origin: ["http://localhost:3000"],
+    origin: ["http://localhost:3000"], // Use comma after 3000 and add the frontend url
     credentials: true,
   })
 );
-
-// Default route for testing
-app.get("/", (_req, res) => {
-  res.send("API is running");
-});
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
 
 app.use("/api/v1", router);
 
-app.use(notFound);
+app.get("/", (req: Request, res: Response) => {
+  res.status(200).json({ message: "Welcome to Protfolio Backend" });
+});
 
-// Global Error Handler
 app.use(globalErrorHandler);
 
+app.use((req: Request, res: Response) => {
+  res.status(StatusCodes.NOT_FOUND).json({
+    success: false,
+    message: "API route not found",
+  });
+});
 export default app;

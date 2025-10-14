@@ -2,19 +2,19 @@ import { PrismaClient, UserRole } from "@prisma/client";
 
 import bcrypt from "bcrypt";
 import status from "http-status";
-import AppError from "../../../errors/AppError";
-import { generateToken, verifyToken } from "../../../utils/jwt";
 import { JwtPayload } from "jsonwebtoken";
 import { envVars } from "../../../config/env";
+import AppError from "../../../errors/AppError";
+import { generateToken, verifyToken } from "../../../utils/jwt";
 
 const prisma = new PrismaClient();
 const loginUser = async (payload: { email: string; password: string }) => {
-  const userData = await prisma.admin.findUnique({
+  const userData = await prisma.user.findUnique({
     where: {
       email: payload.email,
     },
   });
-    console.log('Found user data:', userData); 
+  console.log("Found user data:", userData);
 
   if (!userData) {
     throw new AppError(status.NOT_FOUND, "admin Does not exist");
@@ -34,7 +34,7 @@ const loginUser = async (payload: { email: string; password: string }) => {
   const accessToken = generateToken(
     jwtPayload,
     envVars.JWT_ACCESS_SECRET as string,
-    envVars.JWT_ACCESS_EXPIRES as string 
+    envVars.JWT_ACCESS_EXPIRES as string
   );
   const refreshToken = generateToken(
     jwtPayload,
@@ -60,7 +60,7 @@ const refreshToken = async (token: string) => {
   } catch (error) {
     throw new Error("you are not authorized");
   }
-  const userData = await prisma.admin.findUnique({
+  const userData = await prisma.user.findUnique({
     where: {
       email: decodedData?.email,
       role: UserRole.ADMIN,
@@ -74,7 +74,7 @@ const refreshToken = async (token: string) => {
       email: userData.email,
       role: userData.role,
     },
-    envVars.JWT_ACCESS_SECRET as string ,
+    envVars.JWT_ACCESS_SECRET as string,
     envVars.JWT_ACCESS_EXPIRES as string
   );
   return {

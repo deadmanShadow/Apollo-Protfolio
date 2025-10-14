@@ -1,52 +1,38 @@
-import { UserRole } from "@prisma/client";
+import { Prisma } from "@prisma/client";
 import bcrypt from "bcryptjs";
 import { prisma } from "../config/db";
 import { envVars } from "../config/env";
 
-const seedAdmin = async () => {
+export const seedAdmin = async () => {
   try {
-    console.log("Connecting to database...");
-    await prisma.$connect();
-    console.log("Database connected successfully");
-
-    const isExistAdmin = await prisma.admin.findFirst({
-      where: {
-        role: UserRole.ADMIN,
-      },
+    const user = await prisma.user.findUnique({
+      where: { email: envVars.SUPER_USER_EMAIL },
     });
 
-    if (isExistAdmin) {
-      console.log("Admin already exists");
+    if (user) {
+      console.log("Super User already exists!");
       return;
     }
 
-    console.log("Creating admin user...");
+    console.log("Creating Admin.....");
+
+    console.log(envVars.SUPER_USER_PASSWORD, envVars.HASH_SALT_ROUND);
     const hashedPassword = await bcrypt.hash(
-      envVars.ADMIN_PASSWORD,
-      Number(envVars.BCRYPT_SALT_ROUND)
+      envVars.SUPER_USER_PASSWORD as string,
+      Number(envVars.HASH_SALT_ROUND)
     );
 
-    const admin = await prisma.admin.create({
-      data: {
-        name: "Abdullah Raihan Shamil",
-        email: envVars.ADMIN_EMAIL,
-        password: hashedPassword,
-        role: UserRole.ADMIN,
-      },
-    });
+    const payload: Prisma.UserCreateInput = {
+      name: envVars.SUPER_USER_NAME as string,
+      email: envVars.SUPER_USER_EMAIL as string,
+      password: hashedPassword,
+    };
 
-    console.log("Admin created successfully:", {
-      id: admin.id,
-      name: admin.name,
-      email: admin.email,
-      role: admin.role,
-    });
-  } catch (error) {
-    console.error("Error seeding admin:", error);
-    process.exit(1);
-  } finally {
-    await prisma.$disconnect();
+    const superUser = await prisma.user.create({ data: payload });
+
+    console.log("Super User Created.... \n ");
+    console.log(superUser);
+  } catch (err) {
+    console.log(err);
   }
 };
-
-seedAdmin();

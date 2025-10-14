@@ -1,15 +1,15 @@
 import { prisma } from "../../../config/db";
 
 const createExperience = async (payload: any) => {
-  return await prisma.experience.create({
+  return await prisma.workExperience.create({
     data: payload,
   });
 };
 
 const getAllExperiences = async () => {
-  return await prisma.experience.findMany({
+  return await prisma.workExperience.findMany({
     include: {
-      admin: {
+      user: {
         select: {
           name: true,
           email: true,
@@ -20,10 +20,10 @@ const getAllExperiences = async () => {
 };
 
 const getSingleExperience = async (id: number) => {
-  return await prisma.experience.findUnique({
+  return await prisma.workExperience.findUnique({
     where: { id },
     include: {
-      admin: {
+      user: {
         select: {
           name: true,
           email: true,
@@ -34,14 +34,14 @@ const getSingleExperience = async (id: number) => {
 };
 
 const updateExperience = async (id: number, payload: any) => {
-  return await prisma.experience.update({
+  return await prisma.workExperience.update({
     where: { id },
     data: payload,
   });
 };
 
 const deleteExperience = async (id: number) => {
-  return await prisma.experience.delete({
+  return await prisma.workExperience.delete({
     where: { id },
   });
 };

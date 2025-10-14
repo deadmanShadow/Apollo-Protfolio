@@ -1,18 +1,18 @@
-import dotenv from "dotenv";
 import http, { Server } from "http";
 import app from "./app";
 import { prisma } from "./config/db";
 
-dotenv.config();
+import { envVars } from "./config/env";
+import { seedAdmin } from "./utils/seedAdmin";
 
 let server: Server | null = null;
 
 async function connectToDB() {
   try {
     await prisma.$connect();
-    console.log("✅ Database connected.");
-  } catch (error) {
-    console.error("❌ Error connecting to database:", error);
+    console.log("***Database Connected!");
+  } catch (err) {
+    console.log("*** DB connection failed!");
     process.exit(1);
   }
 }
@@ -20,37 +20,30 @@ async function connectToDB() {
 async function startServer() {
   try {
     await connectToDB();
+
     server = http.createServer(app);
-    server.listen(process.env.PORT, () => {
-      console.log(
-        `Personal Protfolio Server is running on port ${process.env.PORT}`
-      );
+    server.listen(envVars.PORT, () => {
+      console.log("Server is Running on port:", envVars.PORT);
     });
 
     handleProcessEvents();
-  } catch (error) {
-    console.error("Error during server startup:", error);
+  } catch (err) {
+    console.log("Error during server setup:", err);
     process.exit(1);
   }
 }
 
-/**
- * Gracefully shutdown the server and close database connections.
- * @param {string} signal - The termination signal received.
- */
 async function gracefulShutdown(signal: string) {
   console.warn(`🔄 Received ${signal}, shutting down gracefully...`);
-
   if (server) {
     server.close(async () => {
-      console.log("✅ HTTP server closed.");
+      console.log("HTTP server closed.");
 
       try {
         console.log("Server shutdown complete.");
       } catch (error) {
-        console.error("❌ Error during shutdown:", error);
+        console.error("Error during shutdown:", error);
       }
-
       process.exit(0);
     });
   } else {
@@ -58,13 +51,10 @@ async function gracefulShutdown(signal: string) {
   }
 }
 
-/**
- * Handle system signals and unexpected errors.
- */
+//handle system signals and unepected errors.
 function handleProcessEvents() {
   process.on("SIGTERM", () => gracefulShutdown("SIGTERM"));
   process.on("SIGINT", () => gracefulShutdown("SIGINT"));
-
   process.on("uncaughtException", (error) => {
     console.error("💥 Uncaught Exception:", error);
     gracefulShutdown("uncaughtException");
@@ -75,6 +65,7 @@ function handleProcessEvents() {
     gracefulShutdown("unhandledRejection");
   });
 }
-
-// Start the application
-startServer();
+(async () => {
+  await startServer();
+  await seedAdmin();
+})();
