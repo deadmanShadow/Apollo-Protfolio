@@ -5,7 +5,7 @@ import { Metadata } from "next";
 import { Suspense } from "react";
 
 export const metadata: Metadata = {
-  title: "All Blogs | Imran Hasan",
+  title: "All Blogs | Abdullah Raihan Shamil",
   description:
     "Browse all blog posts on web development, Next.js, React, and more. Stay updated with the latest tutorials and articles.",
 };

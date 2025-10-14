@@ -13,12 +13,12 @@ export function Footer() {
           © {year}
           <span className="ms-2 me-2">•</span>
           <Link
-            href="https://imranhasan.dev"
+            href="www.google.com"
             target="_blank"
             rel="noopener noreferrer"
             className="hover:underline hover:underline-offset-4"
           >
-            Imran Hasan
+            Abdullah Raihan Shamil
           </Link>
           <span className="ms-2 me-2">—</span>
           All rights reserved.

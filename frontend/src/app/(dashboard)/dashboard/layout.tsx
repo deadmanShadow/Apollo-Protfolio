@@ -51,7 +51,7 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
                 className="cursor-pointer font-bold"
                 variant="link"
               >
-                Imran Hasan (logout)
+                Abdullah Raihan Shamil (logout)
               </Button>
             </div>
           </div>

@@ -5,7 +5,7 @@ import { Metadata } from "next";
 export const dynamic = "force-static";
 
 export const metadata: Metadata = {
-  title: "Projects | Imran Hasan",
+  title: "Projects | Abdullah Raihan Shamil",
   description: "Portfolio",
 };
 
