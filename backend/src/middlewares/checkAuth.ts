@@ -1,7 +1,8 @@
 import { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 import { JwtPayload } from "jsonwebtoken";
-import { env } from "../config/env";
+
+import { envVars } from "../config/env";
 import AppError from "../helpers/AppError";
 import { verifyToken } from "../utils/jwtToken";
 
@@ -13,7 +14,7 @@ export const checkAuth = (req: Request, res: Response, next: NextFunction) => {
 
     const verifiedToken = verifyToken(
       accessToken,
-      env.JWT_SECRET
+      envVars.JWT_SECRET
     ) as JwtPayload;
 
     req.user = verifiedToken;
