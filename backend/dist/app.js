@@ -11,17 +11,19 @@ const globalErrorHandler_1 = require("./middlewares/globalErrorHandler");
 const routes_1 = require("./routes");
 const app = (0, express_1.default)();
 app.use((0, cors_1.default)({
-    origin: ["http://localhost:3000"], // Use comma after 3000 and add the frontend url
+    origin: ["http://localhost:3000"],
     credentials: true,
 }));
 app.use(express_1.default.json());
-app.use(express_1.default.urlencoded({ extended: true }));
+app.use(express_1.default.urlencoded({ extended: true })); // for handing form data
 app.use((0, cookie_parser_1.default)());
 app.use("/api/v1", routes_1.router);
 app.get("/", (req, res) => {
-    res.status(200).json({ message: "Welcome to Protfolio Backend" });
+    res.status(200).json({ message: "Welcome to my Protfolio Backend" });
 });
+//global error handle
 app.use(globalErrorHandler_1.globalErrorHandler);
+//404 not found
 app.use((req, res) => {
     res.status(http_status_codes_1.StatusCodes.NOT_FOUND).json({
         success: false,

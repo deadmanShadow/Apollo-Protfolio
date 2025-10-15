@@ -9,22 +9,23 @@ const app = express();
 
 app.use(
   cors({
-    origin: ["http://localhost:3000"], // Use comma after 3000 and add the frontend url
+    origin: ["http://localhost:3000"],
     credentials: true,
   })
 );
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: true })); // for handing form data
 app.use(cookieParser());
 
 app.use("/api/v1", router);
 
 app.get("/", (req: Request, res: Response) => {
-  res.status(200).json({ message: "Welcome to Protfolio Backend" });
+  res.status(200).json({ message: "Welcome to my Protfolio Backend" });
 });
 
+//global error handle
 app.use(globalErrorHandler);
-
+//404 not found
 app.use((req: Request, res: Response) => {
   res.status(StatusCodes.NOT_FOUND).json({
     success: false,

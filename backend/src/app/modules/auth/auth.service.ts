@@ -1,88 +1,78 @@
-import { PrismaClient, UserRole } from "@prisma/client";
+import bcrypt from "bcryptjs";
+import { StatusCodes } from "http-status-codes";
+import jwt, { JwtPayload } from "jsonwebtoken";
 
-import bcrypt from "bcrypt";
-import status from "http-status";
-import { JwtPayload } from "jsonwebtoken";
+import { prisma } from "../../../config/db";
 import { envVars } from "../../../config/env";
-import AppError from "../../../errors/AppError";
-import { generateToken, verifyToken } from "../../../utils/jwt";
+import AppError from "../../../helpers/AppError";
+import { verifyToken } from "../../../utils/jwtToken";
+export class AuthService {
+  async login(payload: { email: string; password: string }) {
+    const user = await prisma.user.findUnique({
+      where: { email: payload.email },
+    });
 
-const prisma = new PrismaClient();
-const loginUser = async (payload: { email: string; password: string }) => {
-  const userData = await prisma.user.findUnique({
-    where: {
-      email: payload.email,
-    },
-  });
-  console.log("Found user data:", userData);
+    if (!user) {
+      throw new AppError(StatusCodes.NOT_FOUND, "User does not exist!");
+    }
 
-  if (!userData) {
-    throw new AppError(status.NOT_FOUND, "admin Does not exist");
-  }
-  // check is password correct
-  const isCorrectPassword = await bcrypt.compare(
-    payload.password,
-    userData.password
-  );
-  if (!isCorrectPassword) {
-    throw new Error("password incorrect");
-  }
-  const jwtPayload = {
-    email: userData.email,
-    role: userData.role,
-  };
-  const accessToken = generateToken(
-    jwtPayload,
-    envVars.JWT_ACCESS_SECRET as string,
-    envVars.JWT_ACCESS_EXPIRES as string
-  );
-  const refreshToken = generateToken(
-    jwtPayload,
-    envVars.JWT_REFRESH_SECRET,
-    envVars.JWT_REFRESH_EXPIRES as string
-  );
-  return {
-    accessToken,
-    refreshToken,
-    user: {
-      id: userData.id,
-      name: userData.name,
-      email: userData.email,
-      role: userData.role,
-    },
-  };
-};
+    const passwordMatched = await bcrypt.compare(
+      payload.password,
+      user.password
+    );
 
-const refreshToken = async (token: string) => {
-  let decodedData;
-  try {
-    decodedData = verifyToken(token, envVars.JWT_REFRESH_SECRET) as JwtPayload;
-  } catch (error) {
-    throw new Error("you are not authorized");
+    if (!passwordMatched) {
+      throw new AppError(StatusCodes.UNAUTHORIZED, "Password is incorrect!");
+    }
+
+    const jwtPayload: JwtPayload = {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+    };
+
+    const accessToken = jwt.sign(jwtPayload, envVars.JWT_SECRET, {
+      expiresIn: envVars.JWT_ACCESS_TOKEN_EXPIRES,
+    });
+
+    const refreshToken = jwt.sign(jwtPayload, envVars.JWT_SECRET, {
+      expiresIn: envVars.JWT_REFRESH_TOKEN_EXPIRES,
+    });
+
+    const { password: pass, ...userInfo } = user;
+
+    return {
+      accessToken,
+      refreshToken,
+      user: userInfo,
+    };
   }
-  const userData = await prisma.user.findUnique({
-    where: {
-      email: decodedData?.email,
-      role: UserRole.ADMIN,
-    },
-  });
-  if (!userData) {
-    throw new AppError(status.NOT_FOUND, "admin Does not exist");
-  }
-  const accessToken = generateToken(
-    {
-      email: userData.email,
-      role: userData.role,
-    },
-    envVars.JWT_ACCESS_SECRET as string,
-    envVars.JWT_ACCESS_EXPIRES as string
-  );
-  return {
-    accessToken,
-    refreshToken,
+
+  getNewAccessToken = async (refreshToken: string) => {
+    const verifiedRefreshToken = verifyToken(
+      refreshToken,
+      envVars.JWT_SECRET
+    ) as JwtPayload;
+
+    const user = await prisma.user.findUnique({
+      where: {
+        id: verifiedRefreshToken.id,
+      },
+    });
+
+    if (!user)
+      throw new AppError(StatusCodes.BAD_REQUEST, "User does not exist");
+
+    const jwtPayload: JwtPayload = {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+    };
+
+    const accessToken = jwt.sign(jwtPayload, envVars.JWT_SECRET, {
+      expiresIn: envVars.JWT_ACCESS_TOKEN_EXPIRES,
+    });
+
+    return { accessToken };
   };
-};
-export const authService = {
-  loginUser,
-  refreshToken,
-};
+}

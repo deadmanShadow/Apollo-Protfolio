@@ -1,37 +1,82 @@
-import { Request, Response } from "express";
-import status from "http-status";
+import { NextFunction, Request, Response } from "express";
+import { StatusCodes } from "http-status-codes";
+
+import { envVars } from "../../../config/env";
+import AppError from "../../../helpers/AppError";
 import { catchAsync } from "../../../utils/catchAsync";
-import { authService } from "./auth.service";
 import { sendResponse } from "../../../utils/sendResponse";
+import { setAuthCookies } from "../../../utils/setCookies";
+import { AuthService } from "./auth.service";
 
+const authService = new AuthService();
 
-const loginUser = catchAsync(async (req: Request, res: Response) => {
-  const data = req.body;
-  console.log(data);
-  const result = await authService.loginUser(data);
-  const { refreshToken } = result;
-  res.cookie("refreshToken", refreshToken, { httpOnly: true, secure: false });
-   sendResponse(res, {
-    statusCode: status.OK,
-    success: true,
-    message: "logged in successfully",
-    data: {
-      accessToken: result.accessToken,
-      user: result.user,
-    },
-  });
-});
-const refreshToken = catchAsync(async (req: Request, res: Response) => {
-  const { refreshToken } = req.cookies;
-  const result = await authService.refreshToken(refreshToken);
-  sendResponse(res, {
-    statusCode: status.OK,
-    success: true,
-    message: "Logged in successfully",
-    data: result,
-  });
-});
-export const authController = {
-  loginUser,
-  refreshToken,
-};
+export class AuthController {
+  login = catchAsync(
+    async (req: Request, res: Response, next: NextFunction) => {
+      const loginInfo = await authService.login(req.body);
+      setAuthCookies(res, loginInfo);
+
+      return sendResponse(res, {
+        success: true,
+        statusCode: StatusCodes.OK,
+        message: "Login successful!",
+        data: loginInfo,
+      });
+    }
+  );
+
+  logout = catchAsync(
+    async (req: Request, res: Response, next: NextFunction) => {
+      res.clearCookie("accessToken", {
+        httpOnly: true,
+        secure: envVars.NODE_ENV === "production",
+        sameSite: envVars.NODE_ENV === "production" ? "none" : "lax",
+      });
+      res.clearCookie("refreshToken", {
+        httpOnly: true,
+        secure: envVars.NODE_ENV === "production",
+        sameSite: envVars.NODE_ENV === "production" ? "none" : "lax",
+      });
+
+      sendResponse(res, {
+        success: true,
+        statusCode: StatusCodes.OK,
+        message: "Logout successful",
+        data: null,
+      });
+    }
+  );
+
+  getNewAccessToken = catchAsync(
+    async (req: Request, res: Response, next: NextFunction) => {
+      const refreshToken = req.cookies.refreshToken;
+
+      if (!refreshToken) {
+        throw new AppError(
+          StatusCodes.BAD_REQUEST,
+          "No refresh token recieved from cookies"
+        );
+      }
+
+      const accessToken = await authService.getNewAccessToken(refreshToken);
+
+      sendResponse(res, {
+        success: true,
+        statusCode: StatusCodes.OK,
+        message: "New Access Token Retrived successfully",
+        data: accessToken,
+      });
+    }
+  );
+
+  validateUser = catchAsync(
+    async (req: Request, res: Response, next: NextFunction) => {
+      sendResponse(res, {
+        success: true,
+        statusCode: StatusCodes.OK,
+        message: "User validation successful",
+        data: req.user,
+      });
+    }
+  );
+}

@@ -3,6 +3,7 @@
 
 // Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
 generator client {
   provider = "prisma-client-js"
 }
@@ -12,85 +13,68 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// Roles for users
-enum UserRole {
-  ADMIN
-  USER
+ 
+
+
+model User{
+    id Int @id @default(autoincrement())
+
+    name String
+    email String @unique
+    picture String?
+    password String 
+
+    phone String?
+    bio String?
+
+    skills String[]
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt()
+
+    blogs Blog[]
+    projects Project[]
+    experiences WorkExperience[]
 }
 
-// Skill types
-enum SkillType {
-  TECHNICAL
-  SOFT
-}
+model Blog{
+  id Int @id @default(autoincrement())
+  title String 
+  content String 
+  view Int @default(0)
+  published Boolean @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-model User {
-  id         Int       @id @default(autoincrement())
-  name       String
-  email      String    @unique
-  picture    String?
-  password   String
-  phone      String?
-  bio        String?
-  role       UserRole  @default(USER)
-  createdAt  DateTime  @default(now())
-  updatedAt  DateTime  @updatedAt()
-
-  blogs        Blog[]
-  projects     Project[]
-  experiences  WorkExperience[]
-  skills       Skill[]  @relation("UserSkills")
-}
-
-model Skill {
-  id        Int        @id @default(autoincrement())
-  name      String
-  type      SkillType
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt()
-
-  admin     User       @relation("UserSkills", fields: [adminId], references: [id])
-  adminId   Int
-}
-
-model Blog {
-  id         Int       @id @default(autoincrement())
-  title      String
-  content    String
-  view       Int       @default(0)
-  published  Boolean   @default(true)
-  createdAt  DateTime  @default(now())
-  updatedAt  DateTime  @updatedAt()
-
-  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  user User @relation(fields: [userId],references: [id],onDelete: Cascade)
   userId Int
 }
 
-model Project {
-  id          Int       @id @default(autoincrement())
-  title       String
-  thumbnail   String?
-  projectLink String
-  liveSite    String?
-  description String
-  features    String
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt()
 
-  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId Int
+model Project{
+  id Int @id @default(autoincrement())
+  title String
+  thumbnail String?
+  projectLink String 
+  liveSite String?
+  description String 
+  features String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId],references: [id],onDelete: Cascade)
+  userId Int 
 }
 
-model WorkExperience {
-  id        Int       @id @default(autoincrement())
-  company   String?   
-  position  String?  
-  startDate DateTime? 
-  endDate   DateTime? 
-  isFresher Boolean   @default(false) 
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt()
+model WorkExperience{
+  id Int @id @default(autoincrement())
+  company String 
+  position String 
+  startDate DateTime
+  endDate DateTime?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId Int
+  user User @relation(fields: [userId],references: [id],onDelete: Cascade)
+  userId Int 
 }

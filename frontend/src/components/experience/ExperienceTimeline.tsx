@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+
 import {
   Timeline,
   TimelineContent,
@@ -19,24 +20,13 @@ export default function ExperienceTimeline({ data }: { data: any }) {
           <TimelineHeader>
             <TimelineSeparator />
 
-            <TimelineTitle className="text-xl">
-              {item.isFresher ? "Fresher" : item.company}
-            </TimelineTitle>
-
-            {/* Only show dates if startDate exists and is not a fresher */}
-            {!item.isFresher && item.startDate && (
-              <TimelineDate>
-                {format(new Date(item.startDate), "PP")} -{" "}
-                {item.endDate
-                  ? format(new Date(item.endDate), "PP")
-                  : "Present"}
-              </TimelineDate>
-            )}
-
+            <TimelineTitle className="text-xl">{item.company}</TimelineTitle>
+            <TimelineDate>
+              {format(new Date(item.startDate), "PP")} -{" "}
+              {format(new Date(item.endDate), "PP")}
+            </TimelineDate>
             <TimelineIndicator />
           </TimelineHeader>
-
-          {/* Always show position */}
           <TimelineContent>{item.position}</TimelineContent>
         </TimelineItem>
       ))}

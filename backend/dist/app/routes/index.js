@@ -3,10 +3,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.router = void 0;
 const express_1 = require("express");
 const auth_route_1 = require("../modules/auth/auth.route");
-const projects_route_1 = require("../modules/projects/projects.route");
-const skill_route_1 = require("../modules/skill/skill.route");
-const experience_route_1 = require("../modules/experience/experience.route");
 const blog_route_1 = require("../modules/blogs/blog.route");
+const experience_route_1 = require("../modules/experience/experience.route");
+const projects_route_1 = require("../modules/projects/projects.route");
 exports.router = (0, express_1.Router)();
 const moduleRoutes = [
     {
@@ -16,10 +15,6 @@ const moduleRoutes = [
     {
         path: "/projects",
         route: projects_route_1.ProjectRoutes,
-    },
-    {
-        path: "/skills",
-        route: skill_route_1.SkillRoutes,
     },
     {
         path: "/experiences",

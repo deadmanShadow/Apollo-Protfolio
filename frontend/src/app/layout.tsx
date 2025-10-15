@@ -9,7 +9,7 @@ const geistSans = Geist({
 });
 const merriweather = Merriweather({
   subsets: ["latin"],
-  weight: ["400", "700"], // 400 = normal, 700 = bold
+  weight: ["400", "700"],
   variable: "--font-merriweather",
 });
 const geistMono = Geist_Mono({

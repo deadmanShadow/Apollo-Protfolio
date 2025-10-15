@@ -17,7 +17,7 @@ const HomePage = async () => {
   return (
     <div className="grid grid-cols-1 mx-auto max-w-3xl">
       <div className="">
-        <AboutMe user={data}></AboutMe>
+        <AboutMe user={data} />
       </div>
     </div>
   );

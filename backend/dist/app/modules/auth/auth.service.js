@@ -8,77 +8,81 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __rest = (this && this.__rest) || function (s, e) {
+    var t = {};
+    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+        t[p] = s[p];
+    if (s != null && typeof Object.getOwnPropertySymbols === "function")
+        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
+            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
+                t[p[i]] = s[p[i]];
+        }
+    return t;
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.authService = void 0;
-const client_1 = require("@prisma/client");
-const bcrypt_1 = __importDefault(require("bcrypt"));
-const http_status_1 = __importDefault(require("http-status"));
+exports.AuthService = void 0;
+const bcryptjs_1 = __importDefault(require("bcryptjs"));
+const http_status_codes_1 = require("http-status-codes");
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+const db_1 = require("../../../config/db");
 const env_1 = require("../../../config/env");
-const AppError_1 = __importDefault(require("../../../errors/AppError"));
-const jwt_1 = require("../../../utils/jwt");
-const prisma = new client_1.PrismaClient();
-const loginUser = (payload) => __awaiter(void 0, void 0, void 0, function* () {
-    const userData = yield prisma.user.findUnique({
-        where: {
-            email: payload.email,
-        },
-    });
-    console.log("Found user data:", userData);
-    if (!userData) {
-        throw new AppError_1.default(http_status_1.default.NOT_FOUND, "admin Does not exist");
+const AppError_1 = __importDefault(require("../../../helpers/AppError"));
+const jwtToken_1 = require("../../../utils/jwtToken");
+class AuthService {
+    constructor() {
+        this.getNewAccessToken = (refreshToken) => __awaiter(this, void 0, void 0, function* () {
+            const verifiedRefreshToken = (0, jwtToken_1.verifyToken)(refreshToken, env_1.envVars.JWT_SECRET);
+            const user = yield db_1.prisma.user.findUnique({
+                where: {
+                    id: verifiedRefreshToken.id,
+                },
+            });
+            if (!user)
+                throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "User does not exist");
+            const jwtPayload = {
+                id: user.id,
+                name: user.name,
+                email: user.email,
+            };
+            const accessToken = jsonwebtoken_1.default.sign(jwtPayload, env_1.envVars.JWT_SECRET, {
+                expiresIn: env_1.envVars.JWT_ACCESS_TOKEN_EXPIRES,
+            });
+            return { accessToken };
+        });
     }
-    // check is password correct
-    const isCorrectPassword = yield bcrypt_1.default.compare(payload.password, userData.password);
-    if (!isCorrectPassword) {
-        throw new Error("password incorrect");
+    login(payload) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const user = yield db_1.prisma.user.findUnique({
+                where: { email: payload.email },
+            });
+            if (!user) {
+                throw new AppError_1.default(http_status_codes_1.StatusCodes.NOT_FOUND, "User does not exist!");
+            }
+            const passwordMatched = yield bcryptjs_1.default.compare(payload.password, user.password);
+            if (!passwordMatched) {
+                throw new AppError_1.default(http_status_codes_1.StatusCodes.UNAUTHORIZED, "Password is incorrect!");
+            }
+            const jwtPayload = {
+                id: user.id,
+                name: user.name,
+                email: user.email,
+            };
+            const accessToken = jsonwebtoken_1.default.sign(jwtPayload, env_1.envVars.JWT_SECRET, {
+                expiresIn: env_1.envVars.JWT_ACCESS_TOKEN_EXPIRES,
+            });
+            const refreshToken = jsonwebtoken_1.default.sign(jwtPayload, env_1.envVars.JWT_SECRET, {
+                expiresIn: env_1.envVars.JWT_REFRESH_TOKEN_EXPIRES,
+            });
+            const { password: pass } = user, userInfo = __rest(user, ["password"]);
+            return {
+                accessToken,
+                refreshToken,
+                user: userInfo,
+            };
+        });
     }
-    const jwtPayload = {
-        email: userData.email,
-        role: userData.role,
-    };
-    const accessToken = (0, jwt_1.generateToken)(jwtPayload, env_1.envVars.JWT_ACCESS_SECRET, env_1.envVars.JWT_ACCESS_EXPIRES);
-    const refreshToken = (0, jwt_1.generateToken)(jwtPayload, env_1.envVars.JWT_REFRESH_SECRET, env_1.envVars.JWT_REFRESH_EXPIRES);
-    return {
-        accessToken,
-        refreshToken,
-        user: {
-            id: userData.id,
-            name: userData.name,
-            email: userData.email,
-            role: userData.role,
-        },
-    };
-});
-const refreshToken = (token) => __awaiter(void 0, void 0, void 0, function* () {
-    let decodedData;
-    try {
-        decodedData = (0, jwt_1.verifyToken)(token, env_1.envVars.JWT_REFRESH_SECRET);
-    }
-    catch (error) {
-        throw new Error("you are not authorized");
-    }
-    const userData = yield prisma.user.findUnique({
-        where: {
-            email: decodedData === null || decodedData === void 0 ? void 0 : decodedData.email,
-            role: client_1.UserRole.ADMIN,
-        },
-    });
-    if (!userData) {
-        throw new AppError_1.default(http_status_1.default.NOT_FOUND, "admin Does not exist");
-    }
-    const accessToken = (0, jwt_1.generateToken)({
-        email: userData.email,
-        role: userData.role,
-    }, env_1.envVars.JWT_ACCESS_SECRET, env_1.envVars.JWT_ACCESS_EXPIRES);
-    return {
-        accessToken,
-        refreshToken,
-    };
-});
-exports.authService = {
-    loginUser,
-    refreshToken,
-};
+}
+exports.AuthService = AuthService;

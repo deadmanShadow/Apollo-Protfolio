@@ -1,6 +1,22 @@
-import express from 'express';
-import { authController } from './auth.controller';
-const router = express.Router();
-router.post("/login", authController.loginUser);
-router.post("/refreshToken",authController.refreshToken)
-export const  authRoutes = router
+import { Router } from "express";
+import z from "zod";
+
+import { checkAuth } from "../../../middlewares/checkAuth";
+import { validateRequest } from "../../middleware/validateRequest";
+import { AuthController } from "./auth.controller";
+
+const router = Router();
+
+const authController = new AuthController();
+
+const LoginSchema = z.object({
+  email: z.email(),
+  password: z.string(),
+});
+
+router.post("/login", validateRequest(LoginSchema), authController.login);
+router.post("/logout", authController.logout);
+router.post("/refresh-token", authController.getNewAccessToken);
+router.get("/validate", checkAuth, authController.validateUser);
+
+export const authRoutes = router;
