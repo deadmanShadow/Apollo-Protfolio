@@ -33,7 +33,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         >
           <div className="grid flex-1 text-left text-sm leading-tight">
             <h1 className="text-2xl">
-              <Link href="/dashboard">Portfolio</Link>
+              <Link href="/">Me</Link>
             </h1>
           </div>
         </SidebarMenuButton>

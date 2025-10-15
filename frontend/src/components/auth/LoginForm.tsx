@@ -39,7 +39,7 @@ const LoginForm = () => {
       const res = await login(values);
 
       if (res?.statusCode === 200) {
-        toast.success("Login successful", { id: toastId });
+        toast.success("Welcome Sir!", { id: toastId });
         router.push("/dashboard");
       } else {
         toast.error(res?.message, { id: toastId });
@@ -56,7 +56,7 @@ const LoginForm = () => {
         onSubmit={form.handleSubmit(onSubmit)}
         className="space-y-6 w-full "
       >
-        <h2 className="text-3xl font-bold text-center">Login</h2>
+        <h2 className="text-3xl font-bold text-center">Welcome to Builder</h2>
 
         {/* Email */}
         <FormField

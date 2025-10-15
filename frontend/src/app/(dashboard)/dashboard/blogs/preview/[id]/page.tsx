@@ -37,7 +37,7 @@ const BlogPreviewPage = async ({
           <CardTitle className="text-center"> Blog Preview</CardTitle>
 
           <div className="flex gap-1">
-            <Button asChild>
+            <Button asChild className="bg-blue-500 hover:bg-blue-600">
               <Link href={`/dashboard/blogs/${id}`}>
                 <Edit />
               </Link>

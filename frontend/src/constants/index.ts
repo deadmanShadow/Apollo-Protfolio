@@ -11,6 +11,10 @@ export const publicNavbarItems = [
     title: "Blogs",
     url: "/blogs",
   },
+  {
+    title: "Builder?",
+    url: "/login",
+  },
 ];
 
 export const dashboardSidebarItems = [

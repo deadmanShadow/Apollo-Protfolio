@@ -42,7 +42,7 @@ export default function BlogCard({ blog }: { blog: any }) {
 
         <div className="flex justify-between items-center">
           <div className="flex gap-1">
-            <Button asChild>
+            <Button asChild className="bg-blue-500 hover:bg-blue-600">
               <Link href={`/dashboard/blogs/${blog.id}`}>Edit</Link>
             </Button>
             <DeleteConfirmDialog id={blog?.id} scope="blog" />

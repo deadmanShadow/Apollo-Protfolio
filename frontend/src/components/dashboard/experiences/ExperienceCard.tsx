@@ -20,7 +20,7 @@ export default function ExperienceCard({ experience }: { experience: any }) {
         </p>
         <div className="flex justify-between items-center ">
           <div className="flex gap-1  ml-auto">
-            <Button asChild>
+            <Button asChild className="bg-blue-500 hover:bg-blue-600">
               <Link href={`/dashboard/experiences/${experience.id}`}>Edit</Link>
             </Button>
             <DeleteConfirmDialog id={experience?.id} scope="experience" />

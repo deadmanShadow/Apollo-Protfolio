@@ -22,7 +22,9 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
     const res = await logout();
     console.log(res);
     if (res.success) {
-      toast.success(res.message, { id: toastId });
+      toast.success("Logged Out Sir!", {
+        id: toastId,
+      });
       router.refresh();
     } else {
       toast.error(res.message ?? "Something went wrong", { id: toastId });
@@ -51,7 +53,7 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
                 className="cursor-pointer font-bold"
                 variant="link"
               >
-                Abdullah Raihan Shamil (logout)
+                Abdullah Raihan Shamil (Logout)
               </Button>
             </div>
           </div>

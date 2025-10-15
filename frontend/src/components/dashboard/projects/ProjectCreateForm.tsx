@@ -75,7 +75,7 @@ export default function ProjectCreateForm() {
             <FormItem>
               <FormLabel>Title</FormLabel>
               <FormControl>
-                <Input placeholder="E.g Wallet Management System" {...field} />
+                <Input placeholder="E.g eCommerce solution" {...field} />
               </FormControl>
 
               <FormMessage />
@@ -89,7 +89,7 @@ export default function ProjectCreateForm() {
             name="projectLink"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Project Link</FormLabel>
+                <FormLabel>Github Repository</FormLabel>
                 <FormControl>
                   <Input
                     placeholder="E.g. https://github.com/xx/xx"

@@ -50,16 +50,16 @@ export default function ProjectCard({ project }: { project: any }) {
 
         <div className="flex items-center   gap-2 my-4 ">
           <Link
-            className="hover:underline text-sm font-semibold text-white bg-blue-500 py-1 px-3 rounded-3xl"
+            className="hover:underline text-sm font-semibold text-white bg-emerald-800 py-1 px-3 rounded-3xl"
             target="blank"
             href={project.projectLink}
           >
-            Project Link
+            Github Repository
           </Link>
 
           {project.liveSite && (
             <Link
-              className="hover:underline text-sm font-semibold text-white bg-blue-500 py-1 px-3 rounded-3xl"
+              className="hover:underline text-sm font-semibold text-white bg-cyan-950 py-1 px-3 rounded-3xl"
               target="blank"
               href={project.liveSite}
             >
@@ -70,7 +70,7 @@ export default function ProjectCard({ project }: { project: any }) {
 
         <div className="flex justify-between items-center ">
           <div className="flex ml-auto gap-1">
-            <Button asChild>
+            <Button asChild className="bg-blue-500 hover:bg-blue-600">
               <Link href={`/dashboard/projects/${project?.id}`}>Edit</Link>
             </Button>
             <DeleteConfirmDialog id={project?.id} scope="project" />

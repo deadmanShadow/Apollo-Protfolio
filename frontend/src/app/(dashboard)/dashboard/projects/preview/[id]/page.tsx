@@ -36,7 +36,7 @@ const ProjectPreviewPage = async ({
           <CardTitle className="text-center"> Project Preview</CardTitle>
 
           <div className="flex gap-1">
-            <Button asChild>
+            <Button asChild className="bg-blue-500 hover:bg-blue-600">
               <Link href={`/dashboard/projects/${id}`}>
                 <Edit />
               </Link>

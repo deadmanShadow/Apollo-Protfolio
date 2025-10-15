@@ -7,23 +7,16 @@ export async function AboutMe({ user }: { user: any }) {
   return (
     <>
       <div className="flex flex-row">
-        <Link
-          href="https://github.com/deadmanShadow"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="rounded-full"
-        >
-          <Avatar className="size-40 shadow border my-2">
-            <AvatarImage
-              className="object-contain"
-              alt={user.name}
-              src={user.picture}
-            />
-            <AvatarFallback className="font-mono font-bold">
-              {user.name}
-            </AvatarFallback>
-          </Avatar>
-        </Link>
+        <Avatar className="size-40 shadow border my-2">
+          <AvatarImage
+            className="object-contain rounded-full"
+            alt={user.name}
+            src={user.picture}
+          />
+          <AvatarFallback className="font-mono font-bold">
+            {user.name}
+          </AvatarFallback>
+        </Avatar>
       </div>
 
       <div className="flex items-center flex-row gap-4">
@@ -43,7 +36,7 @@ export async function AboutMe({ user }: { user: any }) {
             rel="noopener noreferrer"
             className="hidden md:flex"
           >
-            Available
+            Knock Me On LinkedIn
           </Link>
         </Button>
       </div>

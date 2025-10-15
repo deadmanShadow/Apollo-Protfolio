@@ -33,16 +33,16 @@ export default function ProjectCard({ project }: { project: any }) {
 
         <div className="flex items-center   gap-2 mb-4  ">
           <Link
-            className="hover:underline text-sm font-semibold text-white bg-blue-500 py-1 px-3 rounded-3xl"
+            className="hover:underline text-sm font-semibold text-white bg-green-800 py-1 px-3 rounded-3xl"
             target="blank"
             href={project.projectLink}
           >
-            Project Link
+            Github Repository
           </Link>
 
           {project.liveSite && (
             <Link
-              className="hover:underline text-sm font-semibold text-white bg-blue-500 py-1 px-3 rounded-3xl"
+              className="hover:underline text-sm font-semibold text-white bg-cyan-950 py-1 px-3 rounded-3xl"
               target="blank"
               href={project.liveSite}
             >

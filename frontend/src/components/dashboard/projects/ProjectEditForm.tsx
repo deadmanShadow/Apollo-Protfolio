@@ -100,7 +100,7 @@ export default function ProjectEditForm({ project }: { project: any }) {
             name="projectLink"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Project Link</FormLabel>
+                <FormLabel>Github Repository</FormLabel>
                 <FormControl>
                   <Input
                     placeholder="E.g. https://github.com/xx/xx"
