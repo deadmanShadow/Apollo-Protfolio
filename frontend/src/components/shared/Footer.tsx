@@ -13,7 +13,7 @@ export function Footer() {
           © {year}
           <span className="ms-2 me-2">•</span>
           <Link
-            href="https://imranhasan.dev"
+            href="https://www.facebook.com/deadmanShadow1"
             target="_blank"
             rel="noopener noreferrer"
             className="hover:underline hover:underline-offset-4"
