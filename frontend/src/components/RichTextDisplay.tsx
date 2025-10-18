@@ -8,9 +8,7 @@ interface RichTextDisplayProps {
 }
 
 const RichTextDisplay = ({ html, className = "" }: RichTextDisplayProps) => {
-  // Normalize HTML to avoid <div> inside <p>
   const normalizeHTML = (html: string) => {
-    // Replace <p><div>...</div></p> with just <div>...</div>
     if (html) {
       return html.replace(/<p>(\s*<div[\s\S]*?<\/div>\s*)<\/p>/g, "$1");
     } else {

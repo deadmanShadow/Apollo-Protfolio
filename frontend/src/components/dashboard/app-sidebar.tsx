@@ -45,7 +45,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               <SidebarMenuItem key={index}>
                 <Link href={item.url}>
                   <SidebarMenuButton
-                    // isActive={item.url === pathname}
                     tooltip={item.title}
                     className={cn({
                       "bg-gray-200": item.url === pathname,
