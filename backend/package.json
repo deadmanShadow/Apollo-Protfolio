@@ -11,17 +11,12 @@
     "postinstall": "prisma generate"
   },
   "repository": {
-    "type": "git",
-    "url": "git+https://github.com/icerahi/assignment-7.git"
+    "type": "git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "type": "commonjs",
-  "bugs": {
-    "url": "https://github.com/icerahi/assignment-7/issues"
-  },
-  "homepage": "https://github.com/icerahi/assignment-7#readme",
   "devDependencies": {
     "@types/cookie-parser": "^1.4.9",
     "@types/cors": "^2.8.19",

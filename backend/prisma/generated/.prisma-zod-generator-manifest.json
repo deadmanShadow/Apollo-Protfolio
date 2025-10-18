@@ -2,7 +2,7 @@
   "version": "1.0",
   "generatorVersion": "1.0.0",
   "generatedAt": "2025-10-01T15:16:31.193Z",
-  "outputPath": "/Users/rahi/Desktop/assignment-7/prisma/generated",
+  "outputPath": "/Users/raiha/Desktop/Assignment-7/prisma/generated",
   "files": [
     "schemas/enums/TransactionIsolationLevel.schema.ts",
     "schemas/enums/UserScalarFieldEnum.schema.ts",
